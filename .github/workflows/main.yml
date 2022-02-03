@@ -2,8 +2,6 @@
 name: ZJNU Auto Block-in
 
 on:
-  schedule:
-  - cron: "0 7 * * *"
   workflow_dispatch:
 
 jobs:
@@ -29,7 +27,4 @@ jobs:
         python3 main.py
       env:
         USERS: ${{ secrets.USERS }}
-        
-      
-        
         

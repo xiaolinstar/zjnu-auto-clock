@@ -1,11 +1,13 @@
 import datetime
+import os
 
 import requests
-from user import users
 session = requests.Session()
 LOGIN_API = 'http://zyt.zjnu.edu.cn/Login/EIPV4/login.aspx'
 INFO_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/FillIn.aspx'
 FILL_CHECK_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/CheckFillIn.aspx'
+
+users = eval(os.environ['USERS'])
 
 HEADER = {
     'Accept-Encoding': 'gzip, deflate',
