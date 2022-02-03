@@ -167,6 +167,7 @@ if __name__ == '__main__':
     token = get_token()
     LOGIN_DATA['hdnToken'] = token
     for person in users:
+        print(person)
         name, uname, passwd = person
         print(name, '正在打卡...')
         auto_clock(uname, passwd)
