@@ -89,7 +89,7 @@ email: xlxing@bupt.edu.cn
 <!-- links -->
 [contributors-shield]: https://img.shields.io/github/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [contributors-url]: https://github.com/549506247xxl/zjnu-auto-clock/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [forks-url]: https://github.com/549506247xxl/zjnu-auto-clock/network/members
 [stars-shield]: https://img.shields.io/github/stars/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [stars-url]: https://github.com/549506247xxl/zjnu-auto-clock/stargazers
