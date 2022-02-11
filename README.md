@@ -87,12 +87,11 @@ GitHub的actions提供的服务器定时系统有一定的误差误差和延迟�
 email: xlxing@bupt.edu.cn
 
 <!-- links -->
-[your-project-path]:shaojintian/Best_README_template
-[contributors-shield]: https://img.shields.io/github/contributors/shaojintian/Best_README_template.svg?style=flat-square
+[contributors-shield]: https://img.shields.io/github/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [contributors-url]: https://github.com/549506247xxl/zjnu-auto-clock/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/shaojintian/Best_README_template.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [forks-url]: https://github.com/549506247xxl/zjnu-auto-clock/network/members
-[stars-shield]: https://img.shields.io/github/stars/shaojintian/Best_README_template.svg?style=flat-square
+[stars-shield]: https://img.shields.io/github/stars/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [stars-url]: https://github.com/549506247xxl/zjnu-auto-clock/stargazers
-[issues-shield]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg?style=flat-square
+[issues-shield]: https://img.shields.io/github/issues/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
 [issues-url]: https://github.com/549506247xxl/zjnu-auto-clock/issues
