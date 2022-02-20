@@ -9,6 +9,7 @@ FILL_CHECK_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/CheckFillIn.aspx'
 
 users = eval(os.environ['USERS'])
 
+
 HEADER = {
     'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'zh-CN, zh; q=0.9',
@@ -56,8 +57,8 @@ USER_DATA = {
     'DATA_9': '是，已经接种加强针',
     'DATA_16': '17周岁以上',
     'DATA_12': '',
-    'DATA_13': '尚未返校',
-    'DATA_14': '河南省 焦作市 沁阳市',
+    'DATA_13': '',
+    'DATA_14': '',
     'DATA_15': '我已知晓并如实填报',
     'hidDATA_1': '体温正常',
     'hidDATA_2': '正常',
@@ -71,12 +72,13 @@ USER_DATA = {
     'hidDATA_10': '否',
     'hidDATA_11': '',
     'hidDATA_12': '',
-    'hidDATA_13': '尚未返校',
-    'hidDATA_14': '河南省 焦作市 沁阳市',
+    'hidDATA_13': '',
+    'hidDATA_14': '',
     'hidDATA_15': '我已知晓并如实填报',
     'hidDATA_16': '17周岁以上',
     'hidDATA_17': '无法获取当前地理位置'
 }
+SCHOOL = '浙江师范大学本部校区'
 
 
 def get_token():
@@ -90,9 +92,25 @@ def get_token():
         print('获取登陆页面发生错误', e)
 
 
-def post_login(username, password):
+def post_login(username, password, loc):
     # hdnToken: 隐藏的一个token，每天会更新
     """data中的三个变量: hdnToken UserText Password"""
+
+    """在学校"""
+    if loc == '':
+        USER_DATA['DATA_13'] = SCHOOL
+        USER_DATA['DATA_14'] = ''
+        USER_DATA['hidDATA_13'] = SCHOOL
+        USER_DATA['hidDATA_14'] = ''
+        USER_DATA['hidDATA_17'] = '浙江省 金华市 婺城区'
+    else:
+        """在家里"""
+        USER_DATA['DATA_13'] = '尚未返校'
+        USER_DATA['DATA_14'] = loc
+        USER_DATA['hidDATA_13'] = '尚未返校'
+        USER_DATA['hidDATA_14'] = loc
+        USER_DATA['hidDATA_17'] = loc
+
     try:
         login_in = session.post(
             url=LOGIN_API,
@@ -155,8 +173,8 @@ def check_submit():
     return False
 
 
-def auto_clock(username, password):
-    if post_login(username, password):
+def auto_clock(username, password, loc):
+    if post_login(username, password, loc):
         if not check_submit():
             post_info()
             if not check_submit():
@@ -167,8 +185,12 @@ if __name__ == '__main__':
     token = get_token()
     LOGIN_DATA['hdnToken'] = token
     for person in users:
-        name, uname, passwd = person
+        location = ''
+        if len(person) == 3:
+            name, uname, passwd = person
+        else:
+            name, uname, passwd, location = person
         print(name, '正在打卡...')
-        auto_clock(uname, passwd)
+        auto_clock(uname, passwd, location)
         print()
 
