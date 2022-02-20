@@ -78,7 +78,11 @@ USER_DATA = {
     'hidDATA_16': '17周岁以上',
     'hidDATA_17': '无法获取当前地理位置'
 }
-SCHOOL = '浙江师范大学本部校区'
+SCHOOL = [
+    '浙江师范大学本部校区',
+    '浙江师范大学杭州校区',
+    '浙江师范大学兰溪校区'
+]
 
 
 def get_token():
@@ -97,10 +101,10 @@ def post_login(username, password, loc):
     """data中的三个变量: hdnToken UserText Password"""
 
     """在学校"""
-    if loc == '':
-        USER_DATA['DATA_13'] = SCHOOL
+    if '浙江师范大学' in loc:
+        USER_DATA['DATA_13'] = loc
         USER_DATA['DATA_14'] = ''
-        USER_DATA['hidDATA_13'] = SCHOOL
+        USER_DATA['hidDATA_13'] = loc
         USER_DATA['hidDATA_14'] = ''
         USER_DATA['hidDATA_17'] = '浙江省 金华市 婺城区'
     else:
@@ -185,11 +189,7 @@ if __name__ == '__main__':
     token = get_token()
     LOGIN_DATA['hdnToken'] = token
     for person in users:
-        location = ''
-        if len(person) == 3:
-            name, uname, passwd = person
-        else:
-            name, uname, passwd, location = person
+        name, uname, passwd, location = person
         print(name, '正在打卡...')
         auto_clock(uname, passwd, location)
         print()
