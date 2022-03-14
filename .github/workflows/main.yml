@@ -2,8 +2,8 @@
 name: ZJNU Auto Block-in
 
 on:
-  schedule:
-    - cron: "1 16 * * *"
+#  schedule:
+#    - cron: "1 16 * * *"
   workflow_dispatch:
 jobs:
   build:
