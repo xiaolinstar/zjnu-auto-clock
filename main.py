@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 session = requests.Session()
-# users = eval(os.environ['USERS'])
+users = eval(os.environ['USERS'])
 
 # 进入登陆页面url
 INDEX_API = 'http://zyt.zjnu.edu.cn/h5/index.aspx'
@@ -281,10 +281,10 @@ class AutoAgent:
 
 if __name__ == '__main__':
     agent = AutoAgent()
-    agent.auto_clock('邢江波', '202025200749', '262511', '河南省 焦作市 沁阳市')
+    # agent.auto_clock('邢江波', '202025200749', '262511', '河南省 焦作市 沁阳市')
 
-    # for person in users:
-    #     name, uname, passwd, location = person
-    #     print(name, '正在打卡...')
-    #     agent.auto_clock(uname, passwd, location)
-    #     print()
+    for person in users:
+        real_name, uname, passwd, location = person
+        print(real_name, '正在打卡...')
+        agent.auto_clock(real_name, uname, passwd, location)
+        print()
