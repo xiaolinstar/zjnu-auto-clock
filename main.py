@@ -2,49 +2,86 @@ import datetime
 import os
 
 import requests
+from bs4 import BeautifulSoup
+
 session = requests.Session()
-LOGIN_API = 'http://zyt.zjnu.edu.cn/Login/EIPV4/login.aspx'
-INFO_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/FillIn.aspx'
+# users = eval(os.environ['USERS'])
+
+# 进入登陆页面url
+INDEX_API = 'http://zyt.zjnu.edu.cn/h5/index.aspx'
+
+# 账户密码登陆url
+LOGIN_API = 'http://zyt.zjnu.edu.cn/H5/Login.aspx?OP=phone_html5'
+
+# 提交打卡信息url
+SUBMIT_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/FillIn.aspx'
+
+# 校验是否已经打卡url
 FILL_CHECK_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/CheckFillIn.aspx'
 
-users = eval(os.environ['USERS'])
-
-
-HEADER = {
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'zh-CN, zh; q=0.9',
+# users = eval(os.environ['USERS'])
+INDEX_HEADER = {
     'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)',
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) '
+                  'Mobile/15E148 MicroMessenger/8.0.26(0x18001a2e) NetType/WIFI Language/zh_CN ',
+    'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+    'Accept-Encoding': 'gzip, deflate',
+    'Connection': 'keep-alive'
 }
 
-LOGIN_DATA = {
-    '__EVENTTARGET': 'btn_Login',
-    '__EVENTARGUMENT': '',
-    '__VIEWSTATE': '/wEPDwUKLTkyNjc3Mjk5MA9kFgICAw9kFgQCAQ8WAh4JaW5uZXJodG1sBS3mtZnmsZ/luIjojIPlpKflrabmiJjnlqvpgJrkv6Hmga/nm7TmiqXns7vnu59kAgsPFgIfAAUy6LeD57+UT0Hlip7lhazns7vnu58g54mI5p2D5omA5pyJICYjMTY5OyAyMDA2LTIwMjJkZAgIyDDRQLxoyKDdShXw1zuRxSt+9zHP9pUa5LyPcnAf',
-    '__VIEWSTATEGENERATOR': 'B88FCDAB',
-    '__EVENTVALIDATION': '/wEdAAdgSVso869Er0OtjX6Ff9fj0elL860XNtv4rogmL6mawP3Vqw5XZsL40jZDizLHlCVw1VqEhL0Qs5iJV9Ksp6V6BSl8Pvpk36YxATXhqVvqZUi2aMKjuup8LZmcudbM9grwpqqjo0L5QYjSKkG6g7gBT3fFWs4JP+sq1oTpmykZOBivAatyb/7PAKkxtdcnNds=',
-    'hdnUsbkey': '',
-    # 'hdnToken': '9FE867A347AC9D54F3D8D73DD9C34F8E',
-    # 'hdnToken': '683CC4D7EA38B61BD2C4D4BCB2FCDFCC',
-    'hdnToken': '',
-    'hdnLogin_Show_AppQcode': '1'
+LOGIN_HEADER = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) '
+                  'Mobile/15E148 MicroMessenger/8.0.26(0x18001a2e) NetType/WIFI Language/zh_CN',
+    'Origin': 'http://zyt.zjnu.edu.cn',
+    'Upgrade-Insecure-Requests': '1',
+    'Referer': 'http://zyt.zjnu.edu.cn/H5/Login.aspx?OP=phone_html5',
+    'Content-Length': '475',
+    'Connection': 'keep-alive'
+}
+
+LOGIN_FORM = {
+    '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr'
+                   '+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZH2Rr9MyTMRw0PsuxdZE7+cP9Kf23Q1a7i9TGaTbOav6',
+    '__VIEWSTATEGENERATOR': 'C483C0FE',
+    '__EVENTVALIDATION': '/wEdAAT2swNn54ju/mL8z2//BH1x0elL860XNtv4rogmL6mawP3Vqw5XZsL40jZDizLHlCVw1VqEhL0Qs5iJV9Ksp6V68s7XdQCdYCZ1RePzbIxprK1pG71RRR7Vtj4SN26hIkk=',
+    'UserText': '',
+    'PasswordText': '',
+    'btn_Login': '登录 Log In'
 }
 
 """
     需要更新的键值对
     personname personcode txtCreateTime
 """
-USER_DATA = {
+SUBMIT_HEADER = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Origin': 'http://zyt.zjnu.edu.cn',
+    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) '
+                  'Mobile/15E148 MicroMessenger/8.0.26(0x18001a2e) NetType/WIFI Language/zh_CN',
+    'Upgrade-Insecure-Requests': '1',
+    'Referer': 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/FillIn.aspx',
+    'Content-Length': '2163',
+    'Connection': 'keep-alive'
+}
+
+SUBMIT_FORM = {
     '__EVENTTARGET': 'btn_save',
     '__EVENTARGUMENT': '',
-    '__VIEWSTATE': '/wEPDwUJOTMwMDE3NjU5ZGSrucGNcWZY4gj6odekPQTFlJVeAKR3Yd2XtPjXa0w0WQ==',
+    '__VIEWSTATE': '/wEPDwUINzYyMjY0MDVkZHFsEp6QGeB0SZf3m2ww7ZBcE6NI2/nADTwfdaX3kcnF',
     '__VIEWSTATEGENERATOR': '3674067D',
-    '__EVENTVALIDATION': '/wEdABl0THonuo/+ink4LkyDZtaKnPdgn5d6iO4LuTjGeN2JM3llOAzR6kycDzMfToHX0QOa6jYEaUq7hqoikcwmGDr/nmnPxOBQ7q1ly++ofgUcfBMeg5WVSSvtrjLjx3x5POv400VKLRNp/k6261iHtmxhYdp8PLLcr00Ykm6GIg/QPm2VAoUsguAjookCWDEX54sHQe9Pfyn7J2iyftT+Cg0mL0jfXWdOZUPTgbQHBDwymb6wlsA0YdypgcCl8awhDxBgYuHAmLDqwPtQh9HDEtJjr+c7NEwFf3c5FPeYdSyrXrYIOfZQS7Mh8jWxQ/3S2fHk/wGpGPyEyYtOtvQbZ7eyCWoEiO6Dd+V6RlHl9UDOJYVHlcFqi++psAvZk9q9RG5W1pRfvYYFhXg72yYOmnpySmm9X2U2t6Y11P+J4lVyalm+n0KUg6wbhm42RvKN577lL2zWcbD6zAaEib0znaI8tWsLH8H+NXQUYD4Kkws4BfoJpIr4b0DV7eZFh6tMLUyznw6pK1ioM6RKyI7TbQybieZNWBTk3CdEPnRsq5aC3CewTWOA8Ln02pcB5hhfE24=',
+    '__EVENTVALIDATION': '/wEdABmDiPh5NiN/sNOZA+C1WGvLnPdgn5d6iO4LuTjGeN2JM3llOAzR6kycDzMfToHX0QOa6jYEaUq7hqoikcwmGDr/+NNFSi0Taf5OtutYh7ZsYZ5pz8TgUO6tZcvvqH4FHHwTHoOVlUkr7a4y48d8eTzrYdp8PLLcr00Ykm6GIg/QPm2VAoUsguAjookCWDEX54sHQe9Pfyn7J2iyftT+Cg0mL0jfXWdOZUPTgbQHBDwymb6wlsA0YdypgcCl8awhDxBgYuHAmLDqwPtQh9HDEtJjr+c7NEwFf3c5FPeYdSyrXrYIOfZQS7Mh8jWxQ/3S2fHk/wGpGPyEyYtOtvQbZ7eyCWoEiO6Dd+V6RlHl9UDOJYVHlcFqi++psAvZk9q9RG5W1pRfvYYFhXg72yYOmnpySmm9X2U2t6Y11P+J4lVyalm+n0KUg6wbhm42RvKN577lL2zWcbD6zAaEib0znaI8tWsLH8H+NXQUYD4Kkws4BfoJpIr4b0DV7eZFh6tMLUyznw6pK1ioM6RKyI7TbQybM6GxmPMSYX84o4wEmyaB5xD8mMW4pVwMDPFQsiBJWTs=',
     'personname': '邢江波',
     'personcode': '202025200749',
-    'txtCreateTime': '',
-    'DATA_1': '体温正常',
+    'txtCreateTime': '',  # 待添加
+    'DATA_1': '空白项',
     'DATA_2': '正常',
     'DATA_3': '体温正常',
     'DATA_4': '否',
@@ -55,12 +92,12 @@ USER_DATA = {
     'DATA_10': '否',
     'DATA_11': '',
     'DATA_9': '是，已经接种加强针',
-    'DATA_16': '17周岁以上',
+    'DATA_16': '否',
     'DATA_12': '',
-    'DATA_13': '',
-    'DATA_14': '',
+    'DATA_13': '',  # 尚未返校
+    'DATA_14': '',  # '家庭地址'
     'DATA_15': '我已知晓并如实填报',
-    'hidDATA_1': '体温正常',
+    'hidDATA_1': '空白项',
     'hidDATA_2': '正常',
     'hidDATA_3': '体温正常',
     'hidDATA_4': '否',
@@ -72,125 +109,182 @@ USER_DATA = {
     'hidDATA_10': '否',
     'hidDATA_11': '',
     'hidDATA_12': '',
-    'hidDATA_13': '',
-    'hidDATA_14': '',
+    'hidDATA_13': '',  # 尚未返校
+    'hidDATA_14': '',  # '家庭地址'
     'hidDATA_15': '我已知晓并如实填报',
-    'hidDATA_16': '17周岁以上',
-    'hidDATA_17': '无法获取当前地理位置'
+    'hidDATA_16': '否',
+    'hidDATA_17': '无法获取当前地理位置'  # 这个需要再次实验
 }
+
 SCHOOL = [
     '浙江师范大学本部校区',
     '浙江师范大学杭州校区',
     '浙江师范大学兰溪校区'
 ]
+USER = 'xlxing@bupt.edu.cn'
 
 
-def get_token():
-    try:
-        index = session.get(
-            url=LOGIN_API,
-            headers={**HEADER}
-        )
-        return index.text[10284: 10316]
-    except Exception as e:
-        print('获取登陆页面发生错误', e)
+class AutoAgent:
+    """
+    自动打卡机器人，可以实现疫情信息每天自动填报。
+    Agent can accomplish automatic filling of epidemic information every day.
+    """
 
+    def __init__(self):
+        self.index_api = INDEX_API
+        self.index_header = INDEX_HEADER
 
-def post_login(username, password, loc):
-    # hdnToken: 隐藏的一个token，每天会更新
-    """data中的三个变量: hdnToken UserText Password"""
+        self.login_api = LOGIN_API
+        self.login_header = LOGIN_HEADER
+        self.login_form = LOGIN_FORM
 
-    """在学校"""
-    if '浙江师范大学' in loc:
-        USER_DATA['DATA_13'] = loc
-        USER_DATA['DATA_14'] = ''
-        USER_DATA['hidDATA_13'] = loc
-        USER_DATA['hidDATA_14'] = ''
-        USER_DATA['hidDATA_17'] = '浙江省 金华市 婺城区'
-    else:
-        """在家里"""
-        USER_DATA['DATA_13'] = '尚未返校'
-        USER_DATA['DATA_14'] = loc
-        USER_DATA['hidDATA_13'] = '尚未返校'
-        USER_DATA['hidDATA_14'] = loc
-        USER_DATA['hidDATA_17'] = loc
+        self.submit_api = SUBMIT_API
+        self.submit_header = SUBMIT_HEADER
+        self.submit_form = SUBMIT_FORM
 
-    try:
-        login_in = session.post(
-            url=LOGIN_API,
-            data={**LOGIN_DATA, 'UserText': username, 'PasswordText': password},
-            headers={
-                **HEADER,
-                'Content-Length': '684'
-            }
-        )
-        if login_in.status_code != 200:
-            print('状态码:', login_in.status_code)
-        text_len = len(login_in.text)
-        if text_len == 13278:
-            print('成功登陆...')
-        elif text_len == 11141:
-            print('账号/密码错误，请核查...')
-            print(LOGIN_API)
-            return False
+    def set_cookie(self):
+        """
+        进入登陆页面，系统随机分配一个cookie
+        通过实践发现，该方法可用可不用，直接提交表单也会分配cookie
+        为了模拟真实手机请求，加上该段，更不容易被服务器发现是脚本提交
+        :return:
+        """
+        try:
+            _ = session.get(
+                url=self.index_api,
+                headers={**self.index_header}
+            )
+            # print(session.cookies)
+        except Exception as e:
+            """
+            出现错误，向管理员发送信息...
+            """
+            print(e)
+            print('获取登陆页面发生错误，请联系作者: {}'.format(USER))
+
+    # 输入用户名和密码登陆
+    def post_login(self, username, password):
+        """
+        :param username: 用户名
+        :param password: 密码
+        :return:
+        """
+
+        try:
+            """
+            post登陆请求，填充header和data，在data中以变量的形势传入'UserText'和'PasswordText'
+            """
+            login_in = session.post(
+                url=self.login_api,
+                data={**self.login_form, 'UserText': username, 'PasswordText': password},
+                headers={
+                    **self.login_header,
+                }
+            )
+            """
+                提交表单后，需要对post请求结果进行处理，可能会出现三种情况
+                - 请求成功，成功登陆
+                - 请求成功，但账号密码错误
+                - 请求失败，post请求发生错误
+                
+                分析：
+                请求成功，状态码 200
+                请求失败，状态码 非200
+                
+                登陆成功和失败进入不同但网页界面，可以根据成功登陆和账号密码错误时的response进行判断
+            """
+            if login_in.status_code != 200:
+                print('状态码:', login_in.status_code)
+
+            result = BeautifulSoup(login_in.text, 'html.parser')
+            text_list = result.get_text().split()
+            if '用户名或密码错误!' in text_list:
+                print('账号/密码错误，请核查...')
+                return False
+            else:
+                print('成功登陆...')
+                return True
+        except Exception as e:
+            """出现错误，向管理员发送错误信息"""
+            print(e)
+            print('登陆网页发生错误，请联系作者: {}'.format(USER))
+
+    # 提交表单信息
+    def submit_info(self, name, username, loc='浙江师范大学本部校区'):
+        """
+        :param name: 姓名如 张三
+        :param username: 账户名如 1234567890
+        :param loc: 打卡地址
+        :return:
+        """
+        # 更新填报日期
+        self.submit_form['txtCreateTime'] = str(datetime.date.today())
+        self.submit_form['personname'] = name
+        self.submit_form['personcode'] = username
+
+        if loc not in SCHOOL:
+            self.submit_form['DATA_13'] = '尚未返校'
+            self.submit_form['DATA_14'] = loc
+            self.submit_form['hidDATA_13'] = '尚未返校'
+            self.submit_form['hidDATA_14'] = loc
         else:
-            print('请求错误，请通知管理员...')
-            return False
-    except Exception as e:
-        print('登陆网页发生错误', e)
-    return True
+            self.submit_form['DATA_13'] = loc
+            self.submit_form['hidDATA_13'] = loc
+        try:
+            submit_res = session.post(
+                url=self.submit_api,
+                data={**self.submit_form},
+                headers={
+                    **self.submit_header,
+                }
+            )
+            print(submit_res.text)
+            if submit_res.status_code != 200:
+                print('状态码', submit_res.status_code)
+                print('提交发生错误，请联系作者: {}'.format(USER))
+        except Exception as e:
+            print(e)
+            print('提交用户时信息发生错误，请联系作者: {}'.format(USER))
 
+    # 判断是否已经提交过
+    def check_submit(self):
+        try:
+            check = session.get(
+                url=FILL_CHECK_API,
+                headers={**self.index_header}
+            )
+            if check.status_code != 200:
+                print('状态码:', check.status_code)
 
-# 提交表单信息
-def post_info():
-    # 更新填报日期
-    USER_DATA['txtCreateTime'] = str(datetime.date.today())
-    try:
-        info_res = session.post(
-            url=INFO_API,
-            data=USER_DATA,
-            headers={
-                **HEADER,
-                'Content-Length': '2249',
-            }
-        )
-        if info_res.status_code != 200:
-            print('状态码', info_res.status_code)
-    except Exception as e:
-        print('提交用户信息发生错误', e)
+            result = BeautifulSoup(check.text, 'html.parser')
+            text_list = result.get_text().split()
+            if '感谢您已完成今日表格信息，请明天继续填报。' in text_list:
+                print('你已经完成了今日的填报...')
+                return True
+        except Exception as e:
+            print(e)
+            print('检查是否已经填报是出错，请联系作者: {}'.format(USER))
+        return False
 
-
-# 判断是否已经提交过
-def check_submit():
-    try:
-        check = session.get(
-            url=FILL_CHECK_API,
-            headers={**HEADER}
-        )
-        if check.status_code != 200:
-            print('状态码:', check.status_code)
-        if len(check.text) == 10749:
-            print('你已经完成了今日的填报，请明天继续填报...')
-            return True
-    except Exception as e:
-        print('检查是否已经填报是出错', e)
-    return False
-
-
-def auto_clock(username, password, loc):
-    if post_login(username, password, loc):
-        if not check_submit():
-            post_info()
-            if not check_submit():
-                print('打卡失败，请手动填报，请通知管理员')
+    def auto_clock(self, name, username, password, loc):
+        # 1. 进入登陆页面获取cookie
+        self.set_cookie()
+        # 2. 账户密码登录获取完整cookie
+        if self.post_login(username, password):
+            # 3. 校验是否已完成今日打卡
+            if not self.check_submit():
+                print('正在打卡...')
+                res = self.submit_info(name, username, loc) and self.check_submit()
+                if res:
+                    print('打卡失败，请手动填报，并联系作者: {}'.format(USER))
 
 
 if __name__ == '__main__':
-    token = get_token()
-    LOGIN_DATA['hdnToken'] = token
-    for person in users:
-        name, uname, passwd, location = person
-        print(name, '正在打卡...')
-        auto_clock(uname, passwd, location)
-        print()
+    agent = AutoAgent()
+    agent.auto_clock('邢江波', '202025200749', '262511', '河南省 焦作市 沁阳市')
 
+    # for person in users:
+    #     name, uname, passwd, location = person
+    #     print(name, '正在打卡...')
+    #     agent.auto_clock(uname, passwd, location)
+    #     print()
