@@ -80,7 +80,7 @@ USERS
 ```
 上述代码表示程序的定时执行，时区是UTC: 分 时 日 月 日 </br>
 默认情况下，该脚本定时每天00:01执行，你可以根据自己的需要更改该设置</br>
-GitHub的actions提供的服务器定时系统有一定的误差误差和延迟，但是不影响使用</br>
+GitHub的actions提供的服务器定时系统有一定的误差和延迟，但是不影响使用</br>
 
 ### 关闭自动打卡Actions
 <img src='image/disable_workflow.png'></img></br>

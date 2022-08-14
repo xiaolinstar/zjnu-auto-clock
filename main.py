@@ -113,7 +113,7 @@ SUBMIT_FORM = {
     'hidDATA_14': '',  # '家庭地址'
     'hidDATA_15': '我已知晓并如实填报',
     'hidDATA_16': '否',
-    'hidDATA_17': '无法获取当前地理位置'  # 这个需要再次实验
+    'hidDATA_17': ''  # 这个需要再次实验
 }
 
 SCHOOL = [
@@ -227,9 +227,18 @@ class AutoAgent:
             self.submit_form['DATA_14'] = loc
             self.submit_form['hidDATA_13'] = '尚未返校'
             self.submit_form['hidDATA_14'] = loc
+            live = loc.split()
+            self.submit_form['hidDATA_17'] = '{}✰{}✰{}'.format(live[0], live[1], live[2])
         else:
             self.submit_form['DATA_13'] = loc
             self.submit_form['hidDATA_13'] = loc
+            if loc == SCHOOL[0]:
+                live = ['浙江省', '金华市', '婺城区']
+            elif loc == SCHOOL[1]:
+                live = ['浙江省', '杭州市', '西湖区']
+            else:
+                live = ['浙江省', '金华市', '兰溪市']
+            self.submit_form['hidDATA_17'] = '{}✰{}✰{}'.format(live[0], live[1], live[2])
         try:
             submit_res = session.post(
                 url=self.submit_api,
@@ -257,10 +266,16 @@ class AutoAgent:
                 print('状态码:', check.status_code)
 
             result = BeautifulSoup(check.text, 'html.parser')
-            text_list = result.get_text().split()
+            text_list = result.find(style='display:;').text.split()
             if '感谢您已完成今日表格信息，请明天继续填报。' in text_list:
                 print('你已经完成了今日的填报...')
                 return True
+            elif '根据校防疫工作要求，请您务必每天上午12点之前完成打卡，并确保“手机定位”功能已经开通，谢谢配合。' in text_list:
+                print('检测到今日未打卡，准备打卡...')
+                return False
+            else:
+                print('检测今日是否打卡出现错误，请联系作者: {}'.format(USER))
+                print(False)
         except Exception as e:
             print(e)
             print('检查是否已经填报是出错，请联系作者: {}'.format(USER))
@@ -272,6 +287,7 @@ class AutoAgent:
         # 2. 账户密码登录获取完整cookie
         if self.post_login(username, password):
             # 3. 校验是否已完成今日打卡
+            print(self.check_submit())
             if not self.check_submit():
                 print('正在打卡...')
                 res = self.submit_info(name, username, loc) and self.check_submit()
