@@ -247,7 +247,6 @@ class AutoAgent:
                     **self.submit_header,
                 }
             )
-            print(submit_res.text)
             if submit_res.status_code != 200:
                 print('状态码', submit_res.status_code)
                 print('提交发生错误，请联系作者: {}'.format(USER))
