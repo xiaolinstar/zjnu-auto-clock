@@ -271,11 +271,9 @@ class AutoAgent:
                 print('你已经完成了今日的填报...')
                 return True
             elif '根据校防疫工作要求，请您务必每天上午12点之前完成打卡，并确保“手机定位”功能已经开通，谢谢配合。' in text_list:
-                print('检测到今日未打卡，准备打卡...')
                 return False
             else:
                 print('检测今日是否打卡出现错误，请联系作者: {}'.format(USER))
-                print(False)
         except Exception as e:
             print(e)
             print('检查是否已经填报是出错，请联系作者: {}'.format(USER))
@@ -287,7 +285,6 @@ class AutoAgent:
         # 2. 账户密码登录获取完整cookie
         if self.post_login(username, password):
             # 3. 校验是否已完成今日打卡
-            print(self.check_submit())
             if not self.check_submit():
                 print('正在打卡...')
                 res = self.submit_info(name, username, loc) and self.check_submit()
