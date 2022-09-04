@@ -3,8 +3,8 @@
 已可以重新启用，支持在家打卡，在学校打卡没有验证，在校生打卡遇到问题请和我联系...  
 如果切换位置信息，比如从家里到学校，或者从学校到家里，请及时关闭该Actions，并修改信息再启用。
 
-浙江师范大学 每日信息填报自动打卡脚本，一次设置，自动打卡，再也不怕班长催，导员赶...</br>
-免责声明：仅供学习技术交流，不作任何商业用途 </br>
+浙江师范大学 每日信息填报自动打卡脚本，一次设置，自动打卡，再也不怕班长催，导员赶。
+免责声明：仅供学习技术交流，不作任何商业用途。
 
 <!-- PROJECT SHIELDS -->
 
@@ -13,7 +13,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 
- 
+
 ## 目录
 
 - [功能介绍](#功能介绍)
@@ -91,6 +91,7 @@ GitHub的actions提供的服务器定时系统有一定的误差和延迟，但�
 
 - [python3](https://www.python.org/)
 - [python第三方处理http包：requests](https://pypi.org/project/requests/)
+- [beautifulSoup4](https://pypi.org/project/beautifulsoup4/)
 - [Github-Actions](https://docs.github.com/en/actions/learn-github-actions)
 
 
@@ -99,11 +100,12 @@ GitHub的actions提供的服务器定时系统有一定的误差和延迟，但�
 email: xlxing@bupt.edu.cn
 
 <!-- links -->
-[contributors-shield]: https://img.shields.io/github/contributors/549506247xxl/zjnu-auto-clock.svg?style=flat-square
-[contributors-url]: https://github.com/549506247xxl/zjnu-auto-clock/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/549506247xxl/zjnu-auto-clock.svg?style=flat-square
-[forks-url]: https://github.com/549506247xxl/zjnu-auto-clock/network/members
-[stars-shield]: https://img.shields.io/github/stars/549506247xxl/zjnu-auto-clock.svg?style=flat-square
-[stars-url]: https://github.com/549506247xxl/zjnu-auto-clock/stargazers
-[issues-shield]: https://img.shields.io/github/issues/549506247xxl/zjnu-auto-clock.svg?style=flat-square
-[issues-url]: https://github.com/549506247xxl/zjnu-auto-clock/issues
+
+[contributors-shield]: https://img.shields.io/github/contributors/xlxingRun/zjnu-auto-clock.svg?style=flat-square
+[contributors-url]: https://github.com/xlxingRun/zjnu-auto-clock/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/xlxingRun/zjnu-auto-clock.svg?style=flat-square
+[forks-url]: https://github.com/xlxingRun/zjnu-auto-clock/network/members
+[stars-shield]: https://img.shields.io/github/stars/xlxingRun/zjnu-auto-clock.svg?style=flat-square
+[stars-url]: https://github.com/xlxingRun/zjnu-auto-clock/stargazers
+[issues-shield]: https://img.shields.io/github/issues/xlxingRun/zjnu-auto-clock.svg?style=flat-square
+[issues-url]: https://github.com/xlxingRun/zjnu-auto-clock/issues
