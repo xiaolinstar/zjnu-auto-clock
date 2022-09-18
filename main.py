@@ -19,7 +19,6 @@ SUBMIT_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/FillIn.aspx'
 # 校验是否已经打卡url
 FILL_CHECK_API = 'http://zyt.zjnu.edu.cn/H5/ZJSFDX/CheckFillIn.aspx'
 
-# users = eval(os.environ['USERS'])
 INDEX_HEADER = {
     'Upgrade-Insecure-Requests': '1',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -45,10 +44,10 @@ LOGIN_HEADER = {
 }
 
 LOGIN_FORM = {
-    '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr'
-                   '+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZH2Rr9MyTMRw0PsuxdZE7+cP9Kf23Q1a7i9TGaTbOav6',
+    # '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr'
+    #                '+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZH2Rr9MyTMRw0PsuxdZE7+cP9Kf23Q1a7i9TGaTbOav6',
+    '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZOfldlp8yilernQ77ANYC4MaK+y1',
     '__VIEWSTATEGENERATOR': 'C483C0FE',
-    '__EVENTVALIDATION': '/wEdAAT2swNn54ju/mL8z2//BH1x0elL860XNtv4rogmL6mawP3Vqw5XZsL40jZDizLHlCVw1VqEhL0Qs5iJV9Ksp6V68s7XdQCdYCZ1RePzbIxprK1pG71RRR7Vtj4SN26hIkk=',
     'UserText': '',
     'PasswordText': '',
     'btn_Login': '登录 Log In'
@@ -195,6 +194,7 @@ class AutoAgent:
             """
             if login_in.status_code != 200:
                 print('状态码:', login_in.status_code)
+                return False
 
             result = BeautifulSoup(login_in.text, 'html.parser')
             text_list = result.get_text().split()
@@ -263,7 +263,7 @@ class AutoAgent:
             )
             if check.status_code != 200:
                 print('状态码:', check.status_code)
-
+                return False
             result = BeautifulSoup(check.text, 'html.parser')
             text_list = result.find(style='display:;').text.split()
             if '感谢您已完成今日表格信息，请明天继续填报。' in text_list:
