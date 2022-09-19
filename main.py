@@ -74,7 +74,7 @@ SUBMIT_HEADER = {
 SUBMIT_FORM = {
     '__EVENTTARGET': 'btn_save',
     '__EVENTARGUMENT': '',
-    '__VIEWSTATE': '/wEPDwUINzYyMjY0MDVkZHFsEp6QGeB0SZf3m2ww7ZBcE6NI2/nADTwfdaX3kcnF',
+    '__VIEWSTATE': '/wEPDwUINzYyMjY0MDVkZBrwT90i7l6LtADspTComrtkJ3qr',
     '__VIEWSTATEGENERATOR': '3674067D',
     '__EVENTVALIDATION': '/wEdABmDiPh5NiN/sNOZA+C1WGvLnPdgn5d6iO4LuTjGeN2JM3llOAzR6kycDzMfToHX0QOa6jYEaUq7hqoikcwmGDr/+NNFSi0Taf5OtutYh7ZsYZ5pz8TgUO6tZcvvqH4FHHwTHoOVlUkr7a4y48d8eTzrYdp8PLLcr00Ykm6GIg/QPm2VAoUsguAjookCWDEX54sHQe9Pfyn7J2iyftT+Cg0mL0jfXWdOZUPTgbQHBDwymb6wlsA0YdypgcCl8awhDxBgYuHAmLDqwPtQh9HDEtJjr+c7NEwFf3c5FPeYdSyrXrYIOfZQS7Mh8jWxQ/3S2fHk/wGpGPyEyYtOtvQbZ7eyCWoEiO6Dd+V6RlHl9UDOJYVHlcFqi++psAvZk9q9RG5W1pRfvYYFhXg72yYOmnpySmm9X2U2t6Y11P+J4lVyalm+n0KUg6wbhm42RvKN577lL2zWcbD6zAaEib0znaI8tWsLH8H+NXQUYD4Kkws4BfoJpIr4b0DV7eZFh6tMLUyznw6pK1ioM6RKyI7TbQybM6GxmPMSYX84o4wEmyaB5xD8mMW4pVwMDPFQsiBJWTs=',
     'personname': '邢江波',
@@ -293,7 +293,7 @@ class AutoAgent:
 
 if __name__ == '__main__':
     agent = AutoAgent()
-    # agent.auto_clock('邢江波', '202025200749', '262511', '河南省 焦作市 沁阳市')
+    # agent.auto_clock('邢江波', '202025200749', '262511', '浙江师范大学本部校区')
 
     for person in users:
         real_name, uname, passwd, location = person
