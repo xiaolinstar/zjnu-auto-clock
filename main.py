@@ -44,8 +44,6 @@ LOGIN_HEADER = {
 }
 
 LOGIN_FORM = {
-    # '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr'
-    #                '+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZH2Rr9MyTMRw0PsuxdZE7+cP9Kf23Q1a7i9TGaTbOav6',
     '__VIEWSTATE': '/wEPDwUKMjAwMjg1NDgwNQ9kFgICAw9kFgQCAQ8PFgIeBFRleHQFLea1meaxn+W4iOiMg+Wkp+WtpuaImOeWq+mAmuS/oeaBr+ebtOaKpeezu+e7n2RkAgsPFgIfAGVkZOfldlp8yilernQ77ANYC4MaK+y1',
     '__VIEWSTATEGENERATOR': 'C483C0FE',
     'UserText': '',
@@ -168,6 +166,20 @@ class AutoAgent:
         :param password: 密码
         :return:
         """
+        try:
+            res = session.get(
+                url=self.login_api
+            )
+            result = BeautifulSoup(res.text, 'html.parser')
+            _view_state = result.find(id='__VIEWSTATE')
+            _view_state_generator = result.find(id='__VIEWSTATEGENERATOR')
+            if _view_state is None or _view_state_generator is None:
+                print('获取__VIEWSTATE为空')
+            else:
+                self.submit_form['__VIEWSTATE'] = _view_state
+                self.submit_form['__VIEWSTATEGENERATOR'] = _view_state_generator
+        except Exception as e:
+            print(e)
 
         try:
             """
@@ -239,6 +251,24 @@ class AutoAgent:
             else:
                 live = ['浙江省', '金华市', '兰溪市']
             self.submit_form['hidDATA_17'] = '{}✰{}✰{}'.format(live[0], live[1], live[2])
+
+        # get
+        try:
+            res = session.get(
+                url=self.submit_api
+            )
+            result = BeautifulSoup(res.text, 'html.parser')
+            _view_state = result.find(id='__VIEWSTATE')
+            _view_state_generator = result.find(id='__VIEWSTATEGENERATOR')
+            if _view_state is None or _view_state_generator is None:
+                print('获取__VIEWSTATE为空')
+            self.submit_form['__VIEWSTATE'] = _view_state
+            self.submit_form['__VIEWSTATEGENERATOR'] = _view_state_generator
+        except Exception as e:
+            print(e)
+            print('获取页面时发生错误，请联系作者: {}'.format(USER))
+
+        # submit
         try:
             submit_res = session.post(
                 url=self.submit_api,
@@ -297,6 +327,5 @@ if __name__ == '__main__':
 
     for person in users:
         real_name, uname, passwd, location = person
-        print(real_name, '正在打卡...')
         agent.auto_clock(real_name, uname, passwd, location)
         print()
