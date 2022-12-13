@@ -1,6 +1,10 @@
 # 浙江师范大学-疫情打卡自动填报 Beta版本
 ## 更新日志
 
+2022-12-13
+关闭workflows的自动任务，取消每日自动打卡任务。
+---
+
 2022-09-21
 
 - 通过html爬取隐藏的\_\_VIEWSTATE和\_\_VIEWSTATEGENERATOR值
